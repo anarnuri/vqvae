@@ -15,9 +15,9 @@ bs = batch_size
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-dataset = CustomDataset(transform=transforms.Compose([transforms.ToTensor(), 
-                                                      transforms.Grayscale(),
-                                                      ]))
+dataset = CustomDataset(img_path='./INPUT_YOUR_IMG_PATH', transform=transforms.Compose([transforms.ToTensor(), 
+                                                                                        transforms.Grayscale(),
+                                                                                        ]))
 
 dataset_size = len(dataset)
 train_size = int(0.7 * dataset_size)
@@ -37,7 +37,6 @@ checkpoint_callback = ModelCheckpoint(
     save_top_k=1)  
 
 wandb_logger = WandbLogger(project='vqvae')
-print(torch.cuda.device_count())
 
 if torch.cuda.device_count() == 1: 
     trainer = pl.Trainer(logger=wandb_logger, accelerator="gpu", max_epochs=-1, callbacks=[checkpoint_callback])
